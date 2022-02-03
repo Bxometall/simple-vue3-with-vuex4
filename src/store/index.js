@@ -1,35 +1,44 @@
 const state = () => ({
-  persons: [
-    { id: 1, name: 'My Name' }
-  ]
-})
-
+  persons: [],
+});
 
 const mutations = {
-  'ADD_PERSON' (state, payload) {
-    state.persons.push(payload)
+  ADD_PERSON(state, payload) {
+    state.persons.push(payload);
   },
-  'CHANGE_PERSON' (state, payload) {
-    // econtrando o objeto e evoluindo ele
-    const newState = state.persons.map(person => person.id === payload ? { ...person, name: 'my new name' } : person)
-    state.persons = newState // atualizando o estado com a mudança
-  }
-}
+  CHANGE_PERSON(state, payload) {
+    const newState = state.persons.map((person) =>
+      person.id === Number(payload.target.id)
+        ? { ...person, name: payload.target.value }
+        : person
+    );
+    state.persons = newState;
+  },
+  TOGGLE_EDIT_MODE(state, payload) {
+    const newState = state.persons.map((person) => {
+      return person.id === payload
+        ? { ...person, inEditMode: !person.inEditMode }
+        : person;
+    });
+    state.persons = newState;
+  },
+};
 
 const actions = {
   addPerson({ commit }, payload) {
-    console.log('passando pela action - add')
-    commit('ADD_PERSON', payload)
+    commit("ADD_PERSON", payload);
   },
   changePerson({ commit }, payload) {
-    console.log('passando pela action - change')
-    commit('CHANGE_PERSON', payload)
-  }
-}
+    commit("CHANGE_PERSON", payload);
+  },
+  toggleEditMode({ commit }, payload) {
+    commit("TOGGLE_EDIT_MODE", payload);
+  },
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
-}
+  actions,
+};
